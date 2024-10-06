@@ -1,0 +1,10 @@
+{% extends 'hr_app/base.html' %}
+
+{% block content %}
+<h2>Добавить навык</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Добавить</button>
+</form>
+{% endblock %}

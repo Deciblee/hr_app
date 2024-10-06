@@ -1,0 +1,86 @@
+{% extends 'hr_app/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <h2>{{ title }}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- Основная информация о сотруднике -->
+        <fieldset>
+            <legend>Основная информация</legend>
+            {{ employee_form.as_p }}
+        </fieldset>
+
+        <!-- Семейная информация -->
+        <fieldset>
+            <legend>Семейное положение</legend>
+            {{ family_form.as_p }}
+        </fieldset>
+
+        <!-- Паспортная информация -->
+        <fieldset>
+            <legend>Паспортная информация</legend>
+            {{ passport_form.as_p }}
+        </fieldset>
+
+        <!-- Образование -->
+        <fieldset>
+            <legend>Образование</legend>
+            {{ education_formset.management_form }}
+            {% for form in education_formset %}
+                <div class="formset">
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
+        </fieldset>
+
+        <!-- Опыт работы -->
+        <fieldset>
+            <legend>Опыт работы</legend>
+            {{ work_experience_formset.management_form }}
+            {% for form in work_experience_formset %}
+                <div class="formset">
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
+        </fieldset>
+
+        <!-- Навыки -->
+        <fieldset>
+            <legend>Навыки</legend>
+            {{ skill_formset.management_form }}
+            {% for form in skill_formset %}
+                <div class="formset">
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
+        </fieldset>
+
+        <!-- Сертификаты -->
+        <fieldset>
+            <legend>Сертификаты</legend>
+            {{ certification_formset.management_form }}
+            {% for form in certification_formset %}
+                <div class="formset">
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
+        </fieldset>
+
+        <!-- Языки -->
+        <fieldset>
+            <legend>Языки</legend>
+            {{ language_formset.management_form }}
+            {% for form in language_formset %}
+                <div class="formset">
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
+        </fieldset>
+
+        <button type="submit">Сохранить</button>
+    </form>
+{% endblock %}

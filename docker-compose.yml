@@ -1,0 +1,47 @@
+version: '3.12'
+
+services:
+  db:
+    image: postgres
+    container_name: db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: hr_app_DB
+      POSTGRES_USER: temp
+      POSTGRES_PASSWORD: temppass
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    container_name: django
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_HOST: db
+      DATABASE_NAME: hr_app_DB
+      DATABASE_USER: temp
+      DATABASE_PASSWORD: temppass
+      DATABASE_PORT: 5432
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: react
+    command: npm start
+    volumes:
+      - ./frontend:/frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:

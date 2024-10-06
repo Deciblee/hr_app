@@ -1,0 +1,13 @@
+{% extends 'hr_app/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <h2>{{ title }}</h2>
+    <p>Вы уверены, что хотите удалить анкету сотрудника <strong>{{ employee }}</strong>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Да, удалить</button>
+        <a href="{% url 'employee_list' %}" class="button-link">Отмена</a>
+    </form>
+{% endblock %}

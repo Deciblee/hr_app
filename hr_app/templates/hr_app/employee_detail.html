@@ -1,0 +1,98 @@
+{% extends 'hr_app/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <h2>{{ title }}</h2>
+
+    <p><strong>Имя:</strong> {{ employee.first_name }}</p>
+    <p><strong>Фамилия:</strong> {{ employee.last_name }}</p>
+    <p><strong>Отчество:</strong> {{ employee.patronymic }}</p>
+    <p><strong>Дата рождения:</strong> {{ employee.date_of_birth }}</p>
+    <p><strong>Пол:</strong> {{ employee.get_gender_display }}</p>
+    <p><strong>Гражданство:</strong> {{ employee.nationality }}</p>
+    <p><strong>Email:</strong> {{ employee.email }}</p>
+    <p><strong>Телефон:</strong> {{ employee.phone_number }}</p>
+    <p><strong>Адрес:</strong> {{ employee.address }}</p>
+
+    <!-- Отображение семейной информации -->
+    {% if employee.family %}
+        <h3>Семейное положение</h3>
+        <p><strong>Семейное положение:</strong> {{ employee.family.get_marital_status_display }}</p>
+        <p><strong>Количество детей:</strong> {{ employee.family.number_of_children }}</p>
+    {% endif %}
+
+    <!-- Отображение паспортной информации -->
+    {% if employee.passport_info %}
+        <h3>Паспортная информация</h3>
+        <p><strong>Номер паспорта:</strong> {{ employee.passport_info.passport_number }}</p>
+        <p><strong>Кем выдан:</strong> {{ employee.passport_info.issued_by }}</p>
+        <p><strong>Дата выдачи:</strong> {{ employee.passport_info.date_issued }}</p>
+        <p><strong>Срок действия:</strong> {{ employee.passport_info.date_expiry }}</p>
+    {% endif %}
+
+    <!-- Отображение образования -->
+    {% if employee.educations.exists %}
+        <h3>Образование</h3>
+        <ul>
+            {% for education in employee.educations.all %}
+                <li>
+                    {{ education.get_education_level_display }} в {{ education.institution }} ({{ education.graduation_year }})
+                    - Специальность: {{ education.specialty }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Отображение опыта работы -->
+    {% if employee.work_experiences.exists %}
+        <h3>Опыт работы</h3>
+        <ul>
+            {% for work in employee.work_experiences.all %}
+                <li>
+                    {{ work.position }} в {{ work.employer }} ({{ work.start_date }} - {{ work.end_date|default:"по настоящее время" }})
+                    <br>
+                    Обязанности: {{ work.responsibilities }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Отображение навыков -->
+    {% if employee.skills.exists %}
+        <h3>Навыки</h3>
+        <ul>
+            {% for skill in employee.skills.all %}
+                <li>{{ skill.skill.name }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Отображение сертификатов -->
+    {% if employee.certifications.exists %}
+        <h3>Сертификаты</h3>
+        <ul>
+            {% for cert in employee.certifications.all %}
+                <li>
+                    {{ cert.certification.name }} - Получен: {{ cert.date_obtained }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Отображение языков -->
+    {% if employee.languages.exists %}
+        <h3>Языки</h3>
+        <ul>
+            {% for lang in employee.languages.all %}
+                <li>
+                    {{ lang.language.name }} - Уровень: {{ lang.get_proficiency_level_display }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Действия -->
+    <a href="{% url 'employee_update' employee.pk %}">Редактировать</a> |
+    <a href="{% url 'employee_delete' employee.pk %}">Удалить</a>
+{% endblock %}
